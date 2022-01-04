@@ -2,7 +2,7 @@
 using System.Diagnostics;
 
 string username = Environment.UserName;
-Console.WriteLine("Hallo" + username + "\n" + "Passwort eingeben!");
+Console.WriteLine("Hallo" + username + "\n" + "Bitte Passwort eingeben!");
 string password = Console.ReadLine();
 
 if (password == null)
@@ -25,21 +25,23 @@ void starten()
 
     //Laufwerke trennen
     //Hier müssen alle Netzlaufwerke eingetragen werden 
-    //Zum Beispiel
+    //Beispiel
     TrenneNetzLaufwerk("L:");
     TrenneNetzLaufwerk("S:");
     
 
 
     //Laufwerke neu verbinden
-    //Zum Beispiel
-    VerbindeNetzLaufwerk("L:", @"\\192.168.100.1\Daten");
-    VerbindeNetzLaufwerk("S:", @"\\192.168.100.1\Daten2");
+    //Benötigt den Laufwerksbuchstaben + Pfad
+    //Beispiel
+    VerbindeNetzLaufwerk("L:", @"\\192.168.100.1\Laufwerk_L");
+    VerbindeNetzLaufwerk("S:", @"\\192.168.100.1\Laufwerk_S");
 
 
 
 }
 
+//Erstellt einen Fortschrittsbalken
 void Fortschritt(string progressText)
 {
     Console.Write(progressText);
@@ -69,17 +71,19 @@ void beginn()
 
 }
 
-void VerbindeNetzLaufwerk(string laufwerk, string ip)
+//Verbindet das Laufwerk
+void VerbindeNetzLaufwerk(string laufwerk, string pfad)
 {
 
     Fortschritt(string.Format("Laufwerk {0} wird neu verbunden. ", laufwerk));
     Process p = new Process();
     p.StartInfo.FileName = "net";
-    p.StartInfo.Arguments = string.Format("use {0} {1} /user:{2} {3}", laufwerk, ip, username, password);
+    p.StartInfo.Arguments = string.Format("use {0} {1} /user:{2} {3}", laufwerk, pfad, username, password);
     p.StartInfo.UseShellExecute = false;
     p.Start();
 }
 
+//Trennt das Laufwerk
 void TrenneNetzLaufwerk(string laufwerk)
 {
     
